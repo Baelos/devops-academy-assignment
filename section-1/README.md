@@ -31,4 +31,4 @@ I also split the VPC logic into a module and used variables. I mainly did that t
 terraform init
 terraform fmt -recursive
 terraform validate
-'''
+
