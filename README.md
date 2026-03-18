@@ -1,50 +1,47 @@
 # DevOps Academy Assignment
 
-This repository contains my submission for the DevOps Academy assignment.  
-I selected one task from each required section and focused on Terraform-based infrastructure work, troubleshooting, and decision-making.
+This repository contains my submission for the DevOps Academy assignment.
 
-## Selected Tasks
+For this assignment, I decided to focus more on Terraform. I had already come across it during my studies and wanted to get closer to it in a more practical way. At the same time, tasks like Dockerizing a Python web app are already something I do as part of school, so I wanted to use this opportunity to work on something a bit different and move more towards infrastructure and infrastructure as code.
+
+## Selected tasks
 
 ### Section 1 – Implementation
 **Task A: Create a Terraform-managed AWS VPC**
 
-Implemented:
-- VPC
-- public and private subnets
-- internet gateway
-- NAT gateway
-- route tables
-- variables and module structure
+In this part, I created a Terraform configuration for:
+- a VPC
+- two public subnets
+- two private subnets
+- an internet gateway
+- a NAT gateway
+- route tables and associations
+
+I also split the VPC part into a module and used variables, mainly to keep the code cleaner and easier to follow.
 
 ### Section 2 – Troubleshooting
 **Task B: Terraform Error: Error locking state**
 
-Covered:
-- root cause of Terraform state locking issues
-- short-term fixes
-- long-term solution using S3 + DynamoDB
-- safe team workflows for Terraform
+Here I focused on a problem that feels much closer to real Terraform usage in a team. I explained why state locking errors happen, what can cause them, how I would handle them in the short term, and what the better long-term setup looks like.
 
 ### Section 3 – Thought Process
 **Task C: Terraform shows large infrastructure diff unexpectedly**
 
-Covered:
-- investigation steps before apply
-- environment and state verification
-- drift detection
-- provider/module/version checks
-- peer review and safe approval process
+For the last section, I wanted to show how I would think before doing something risky. The main idea here was that if Terraform suddenly shows a big unexpected plan, I would not apply it immediately. I would first check the environment, state, recent changes, and whether the infrastructure drifted from the code.
 
-## Repository Structure
+## Repository structure
+
 - `section-1/` – Terraform VPC implementation
-- `section-2/` – troubleshooting write-up for Terraform state locking
-- `section-3/` – thought process write-up for unexpected Terraform diff
+- `section-2/` – write-up for the Terraform state locking issue
+- `section-3/` – thought process for reviewing an unexpected Terraform diff
 
 ## Validation
-For Section 1, the Terraform configuration was checked with:
+
+For the Terraform configuration in section 1, I checked it with:
 - `terraform fmt -recursive`
 - `terraform init`
 - `terraform validate`
 
-## Notes
-The goal of this submission was to demonstrate not only implementation ability, but also understanding of safe infrastructure workflows, Terraform state handling, and production-minded reasoning.
+## Final note
+
+I chose these tasks mainly because I wanted to go a bit more into infrastructure work and not stay only with things I already do more often in school. My goal here was not just to write Terraform code, but also to show that I understand some of the practical thinking around state, change review, and safer workflows.

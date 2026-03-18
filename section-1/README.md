@@ -1,42 +1,34 @@
 # Section 1 – Terraform-managed AWS VPC
 
-## Overview
-This task creates an AWS VPC using Terraform with:
-- public and private subnets
-- internet gateway
-- NAT gateway
-- route tables
-- variables and module structure
+For this task, I chose Terraform because I had already been introduced to it during my studies and wanted to practice it more directly. Since I already do tasks closer to Dockerizing a Python web app in school, I wanted this assignment to be a chance to work more with infrastructure and networking.
 
-## Architecture
-The VPC contains:
-- 2 public subnets in different availability zones
-- 2 private subnets in different availability zones
-- 1 internet gateway attached to the VPC
-- 1 NAT gateway in a public subnet
-- public route table with internet access through the internet gateway
-- private route table with outbound internet access through the NAT gateway
+The configuration creates:
+- one VPC
+- two public subnets in different availability zones
+- two private subnets in different availability zones
+- one internet gateway
+- one NAT gateway
+- route tables and subnet associations
 
-## Why this design
-Public subnets are intended for internet-facing resources such as load balancers or bastion hosts.
-Private subnets are intended for internal services such as application servers or databases that should not be directly exposed to the internet.
+I used public and private subnets because that felt like a good basic example of how infrastructure is usually separated. Public subnets can be used for resources that need internet access, while private subnets are better for internal services that should not be exposed directly.
 
-The NAT gateway allows instances in private subnets to reach the internet for updates or package downloads without exposing them publicly.
+The NAT gateway is there so that resources in private subnets can still reach the internet when needed, for example for updates, without making them public.
 
-## Project structure
-- root Terraform files call the module and define variables/outputs
-- reusable logic is placed inside `modules/vpc`
+I also split the VPC logic into a module and used variables. I mainly did that to keep the configuration less messy and easier to read.
 
 ## Files
+
 - `main.tf` – provider and module call
 - `variables.tf` – input variables
-- `outputs.tf` – exported values
-- `terraform.tfvars` – variable values
-- `modules/vpc/*` – VPC implementation
+- `outputs.tf` – output values
+- `terraform.tfvars` – actual values used
+- `modules/vpc/` – VPC resources
+- `architecture-diagram.png` – simple diagram of the architecture
 
-## Commands
+## Commands used
+
 ```bash
 terraform init
-terraform fmt
+terraform fmt -recursive
 terraform validate
-terraform plan
+'''
