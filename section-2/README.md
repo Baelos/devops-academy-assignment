@@ -24,7 +24,7 @@ terraform force-unlock LOCK_ID
 ```
 I would only do that after checking carefully, because removing a real active lock would be risky.
 
-##Better long-term solution
+###Better long-term solution
 
 The better team setup on AWS is:
 
@@ -44,7 +44,7 @@ I would also want the S3 bucket to have:
 
 And I would keep different state files or environments separated, for example for dev and prod.
 
-##How I would work with Terraform in a team
+####How I would work with Terraform in a team
 
 If multiple people are working with Terraform, I think these things matter the most:
 
@@ -60,6 +60,6 @@ If multiple people are working with Terraform, I think these things matter the m
 
 - avoid random local applies if a team already uses CI/CD for infrastructure
 
-##Final thought
+#####Final thought
 
 For me, this task was less about memorizing one Terraform error message and more about understanding why state handling matters. The locking error is annoying, but it is there for a good reason — to stop people or pipelines from changing the same infrastructure state at the same time.
