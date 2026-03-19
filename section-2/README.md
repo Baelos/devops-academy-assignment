@@ -1,4 +1,3 @@
-
 # Section 2 – Troubleshooting: Terraform Error Locking State
 
 This task is about the Terraform error related to locking the state.
@@ -13,15 +12,21 @@ A locking error can happen for a few common reasons:
 
 So the short version is that Terraform is trying to protect the state.
 
+## Files
+
+- `backend-original.tf` – the original broken configuration from the task
+- `backend-fixed.tf` – corrected backend with DynamoDB locking and encryption
+- `bootstrap-lock-table.tf` – example DynamoDB table used for state locking
+
 ## What I would do first
 
 The first thing I would check is whether another Terraform run is still active. If someone else is applying changes, I would wait for that to finish instead of trying to force anything.
 
 If I was sure that no other run was active and the lock was left behind by a failed or interrupted process, then I would consider removing it manually with:
-
 ```bash
 terraform force-unlock LOCK_ID
 ```
+
 I would only do that after checking carefully, because removing a real active lock would be risky.
 
 ## Better long-term solution
@@ -29,17 +34,18 @@ I would only do that after checking carefully, because removing a real active lo
 The better team setup on AWS is:
 
 - S3 bucket for storing the Terraform state
-
 - DynamoDB table for locking
 
-That way the state is stored remotely and Terraform can lock it properly when someone runs plan or apply.
+That way the state is stored remotely and Terraform can lock it properly when someone runs `plan` or `apply`.
+
+The original configuration in `backend-original.tf` also had a region mismatch — the provider was set to `us-east-1` while the backend used `eu-west-1`. This is fixed in `backend-fixed.tf` where both use `eu-west-1`, and the backend now includes `dynamodb_table` and `encrypt = true`.
+
+I also added a simple example of a DynamoDB table definition in `bootstrap-lock-table.tf`. In practice, backend resources such as the S3 state bucket and DynamoDB lock table are usually bootstrapped separately before being referenced in the backend configuration of another project.
 
 I would also want the S3 bucket to have:
 
 - versioning
-
 - encryption
-
 - limited IAM access
 
 And I would keep different state files or environments separated, for example for dev and prod.
@@ -49,15 +55,10 @@ And I would keep different state files or environments separated, for example fo
 If multiple people are working with Terraform, I think these things matter the most:
 
 - do not share local state files manually
-
 - use remote state
-
 - enable locking
-
-- review plans before apply
-
+- review plans before `apply`
 - be careful with production changes
-
 - avoid random local applies if a team already uses CI/CD for infrastructure
 
 ## Final thought
